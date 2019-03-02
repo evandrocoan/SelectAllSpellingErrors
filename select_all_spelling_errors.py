@@ -5,7 +5,7 @@ import sublime_plugin
 try:
     import cProfile
 
-except:
+except ImportError:
     cProfile = None
 
 
@@ -13,6 +13,7 @@ class SelectAllSpellingErrorsCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
 
+        # cProfile can't be imported on Linux
         # https://github.com/SublimeTextIssues/Core/issues/127
         if cProfile:
             cProfile.runctx( 'findRegions(self, edit)', globals(), locals() )
@@ -22,7 +23,6 @@ class SelectAllSpellingErrorsCommand(sublime_plugin.TextCommand):
 
 
 def findRegions(self, edit):
-
     regionsList = []
 
     while True:
@@ -39,6 +39,4 @@ def findRegions(self, edit):
 
     self.view.sel().clear()
     self.view.sel().add_all( regionsList )
-
-
 
