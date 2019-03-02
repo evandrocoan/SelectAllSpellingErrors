@@ -2,14 +2,24 @@
 import sublime
 import sublime_plugin
 
-import cProfile
+try:
+    import cProfile
+
+except:
+    cProfile = None
 
 
 class SelectAllSpellingErrorsCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
 
-        cProfile.runctx( 'findRegions(self, edit)', globals(), locals() )
+        # https://github.com/SublimeTextIssues/Core/issues/127
+        if cProfile:
+            cProfile.runctx( 'findRegions(self, edit)', globals(), locals() )
+
+        else:
+            findRegions(self, edit)
+
 
 def findRegions(self, edit):
 
